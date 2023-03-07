@@ -1,38 +1,17 @@
-# SlimeVR Tracker firmware for ESP
+# Modified the MPU9250 firmware to adapt to the SlimeVR Tracker firmware for ESP of the MPU6500/6050 + QMC5883L sensor solution!
 
-Firmware for ESP8266 / ESP32 microcontrollers and different IMU sensors to use them as a vive-like trackers in VR.
-
-Requires [SlimeVR Server](https://github.com/SlimeVR/SlimeVR-Server) to work with SteamVR and resolve pose. Should be compatible with [owoTrack](https://github.com/abb128/owo-track-driver), but is not guaranteed.
+If you need to use other sensors, please use [the official repository](https://github.com/SlimeVR/SlimeVR-Tracker-ESP) directly to get the latest version.
 
 ## Configuration
 
-Firmware configuration is located in the `defines.h` file. For more information on how to configure your firmware, refer to the [Configuring the firmware project section of SlimeVR documentation](https://docs.slimevr.dev/firmware/configuring-project.html).
+Firmware configuration is located in the `defines.h` file, just use MPU9250. For more information on how to configure your firmware, refer to the [Configuring the firmware project section of SlimeVR documentation](https://docs.slimevr.dev/firmware/configuring-project.html).
 
 ## Compatibility
 
 The following IMUs and their corresponding `IMU` values are supported by the firmware:
-* BNO085 & BNO086 (IMU_BNO085)
-  * Using any fusion in internal DMP. Best results with ARVR Stabilized Game Rotation Vector or ARVR Stabilized Rotation Vector if in good magnetic environment.
-* BNO080 (IMU_BNO080)
-  * Using any fusion in internal DMP. Doesn't have BNO085's ARVR stabilization, but still gives good results.
-* MPU-6500 (IMU_MPU6500) & MPU-6050 (IMU_MPU6050)
-  * Using internal DMP to fuse Gyroscope and Accelerometer. Can drift substantially.
-  * NOTE: Currently the MPU will auto calibrate when powered on. You *must* place it on the ground and *DO NOT* move it until calibration is complete (for a few seconds). **LED on the ESP will blink 5 times after calibration is over.**
-* BNO055 (IMU_BNO055)
-  * Performs much worse than BNO080, despite having the same hardware. Not recommended for use.
-* MPU-9250 (IMU_MPU9250)
-  * Using Mahony sensor fusion of Gyroscope, Magnetometer and Accelerometer, requires good magnetic environment.
-  * See *Sensor calibration* below for info on calibrating this sensor.
-  * Specify `IMU_MPU6500` in your `defines.h` to use without magnetometer in 6DoF mode.
-  * Experimental support!
-* BMI160 (IMU_BMI160)
-  * Using Mahony sensor fusion of Gyroscope and Accelerometer
-  * See *Sensor calibration* below for info on calibrating this sensor.
-  * Experimental support!
-* ICM-20948 (IMU_ICM20948)
-  * Using fusion in internal DMP for 6Dof or 9DoF, 9DoF mode requires good magnetic environment.
-  * Comment out `USE_6DOF` in `debug.h` for 9DoF mode.
-  * Experimental support!
+* MPU6500/6050 + QMC5883L (IMU_MPU9250)
+  * A more cost-effective solution, due to the use of a magnetometer, the sustainable use time will be greatly extended..  
+  However, you still need to be careful not to buy inferior MPU sensors. Please test whether the data of each axis is accurate before completely welding (a more effective way to check is to rotate 90° in each direction. Once the deviation exceeds 3°, the sensor will not be able to work on the sensor. Full body tracking will not provide a good experience, it is recommended to return and exchange directly)
 
 Firmware can work with both ESP8266 and ESP32. Please edit `defines.h` and set your pinout properly according to how you connected the IMU.
 
